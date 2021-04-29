@@ -1,0 +1,18 @@
+{% include 'header.html' %}
+<div class="container" id="grafik">
+    <div class="row">
+        <div class="col-12 text-center">
+            <div class="card mt-5">
+                <div class="card-header py-1">
+                    Subject : {{subject}}
+                </div>
+                <div class="card-body p-0">
+                    <img src="/matplot-as-image-{{subject}}.svg" id="img-grafik" alt="random points as svg"
+                        class="img-fluid" id="img">
+                    <span class="spinner-border text-primary my-3"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'footer.html' %}

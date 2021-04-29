@@ -1,0 +1,232 @@
+{% include 'header.html' %}
+<!-- {% include 'navbar.html' %} -->
+{% include 'sidebar.html' %}
+{% include 'topbar.html' %}
+
+<div class="container-fluid mt-3">
+    {% with alldone = get_flashed_messages(category_filter=["alldone"]) %}
+    {% if alldone %}
+    {% for alldone in alldone %}
+    <div class="alert alert-success alert-dismissable" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="close">
+            <i class="fa fa-times" aria-hidden="true"></i>
+        </button>
+        {{alldone}}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <div class="row mt-3 mb-5" id="list">
+
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-header">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-6 px-0">
+                                <div class="h5 mb-0">Akurasi nilai K</div>
+                            </div>
+                            <div class="col-6 px-0 text-right text-muted">
+                                {% if dAkurasi.count() != 0 %}
+                                <a href="/excel" class="btn btn-success btn-sm">Export Excel</a>
+                                {% endif %}
+                                Jml : {{dAkurasi.count()}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% if dAkurasi.count() == 0 %}
+                    <div class="text-center text-muted"><i>Belum ada data</i></div>
+                    {% else %}
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm" id="example">
+                            <thead>
+                                <tr>
+                                    <th>K</th>
+                                    <th>Akurasi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for a in dAkurasi %}
+                                <tr>
+                                    <td>{{a.nilai_k}}</td>
+                                    <td>{{a.akurasi}}%</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer text-muted text-right">
+                    {% if dAkurasi.count() != 0 %}
+                    <a href="/delete-akurasi-k" class="btn btn-sm btn-danger">Delete</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-header">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-6 px-0">
+                                <div class="h5 mb-0">Subject Uji</div>
+                            </div>
+                            <div class="col-6 px-0 text-right text-muted">
+                                Jml : {{data.count()}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    {% if data.count() == 0 %}
+                    <div class="text-center text-muted"><i>Belum ada data</i></div>
+                    {% else %}
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm mb-0 table-hover" id="example">
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>K</th>
+                                    <th>Actual</th>
+                                    <th>Prediksi</th>
+                                    <th>Ket</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for d in data %}
+                                <tr>
+                                    <td>{{d.subject}}</td>
+                                    <td>{{d.nilai_k}}</td>
+                                    <td>
+                                        {% if d.target == 1%}
+                                        Stroke
+                                        {% else %}
+                                        Non-Stroke
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if d.prediksi == 1%}
+                                        Stroke
+                                        {% else %}
+                                        Non-Stroke
+                                        {% endif %}
+                                    </td>
+                                    {% if d.target == 1 %}
+                                    {% if d.prediksi == d.target %}
+                                    <td class="bg-success">
+                                        <span class="text-light">TP</span>
+                                    </td>
+                                    {% else %}
+                                    <td class="bg-danger">
+                                        <span class="text-light">FN</span>
+                                    </td>
+                                    {% endif %}
+                                    {% else %}
+                                    {% if d.prediksi == d.target %}
+                                    <td class="bg-success">
+                                        <span class="text-light">TN</span>
+                                    </td>
+                                    {% else %}
+                                    <td class="bg-danger">
+                                        <span class="text-light">FP</span>
+                                    </td>
+                                    {% endif %}
+                                    {% endif %}
+
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="card-footer text-muted text-right">
+                    {% if data.count() != 0 %}
+                    <a href="/delete-uji-subject" class="btn btn-sm btn-danger">Delete</a>
+                    {% endif %}
+                </div>
+            </div>
+
+
+            <div class="card mt-3">
+                <div class="card-header">
+                    <div class="h5 text-center mb-0">Confusion Matrix</div>
+                </div>
+                <div class="card-body">
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover table-sm mb-0">
+                            <tr>
+                                <th width="30%">Actual \ Prediksi</th>
+                                <th width="35%">Positif</th>
+                                <th width="35%">Negatif</th>
+                            </tr>
+                            <tr>
+                                <th>Positif</th>
+                                <td>{{cmatrix.tp}} (TP)</td>
+                                <td>{{cmatrix.fn}} (FN)</td>
+                            </tr>
+                            <tr>
+                                <th>Negatif</th>
+                                <td>{{cmatrix.fp}} (FP)</td>
+                                <td>{{cmatrix.tn}} (TN)</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <hr>
+                    <div class="table-responsive mt-2 ">
+                        <table class="table table-bordered table-hover table-sm mb-0">
+                            <tr>
+                                <th width="30%" class="pointer" data-toggle="modal" data-target="#rAkurasi">Akurasi</th>
+                                <td width="70%">{{cmatrix.acc}}%</td>
+                            </tr>
+                            <tr>
+                                <th>Presisi</th>
+                                <td>{{cmatrix.pres}}%</td>
+                            </tr>
+                            <tr>
+                                <th>Sensitifitas</th>
+                                <td>{{cmatrix.sens}}%</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            {% include 'btnbar.html' %}
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- modal rumus -->
+<div class="modal fade" id="rAkurasi" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Body
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'footer.html' %}

@@ -1,0 +1,171 @@
+{% include 'header.html' %}
+<!-- {% include 'navbar.html' %} -->
+{% include 'sidebar.html' %}
+{% include 'topbar.html' %}
+
+<div class="container-fluid mt-3">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-success alert-dismissable" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="close">
+            <i class="fa fa-times" aria-hidden="true"></i>
+        </button>
+        {{message}}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <div class="row mt-3">
+        <!-- <div class="col-12 text-center">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-secondary active" id="btn-list">
+                    <input type="radio" class="list-1" name="options" checked> List
+                </label>
+                <label class="btn btn-secondary" id="btn-badge">
+                    <input type="radio" class="list-1" name="options"> Badge
+                </label>
+            </div>
+        </div> -->
+        <div class="col-12 text-center mt-1">
+
+        </div>
+    </div>
+
+    <div class="row mt-0 mb-5" id="list">
+
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-header">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-6 px-0">
+                                <div class="h5 mb-0">Stroke</div>
+                            </div>
+                            <div class="col-6 px-0 text-right text-muted">
+                                Jml : {{jml_stroke['1']}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm" id="example">
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <!-- <th>MeanRR</th>
+                                    <th>SDRR</th> -->
+                                    <th>CVRR</th>
+                                    <th>RMSSD</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for a in Hasil_1 %}
+                                <tr>
+                                    <td>
+                                        <a href="/grafik/{{a.subject}}" target="_blank">{{a.subject}}</a>
+                                    </td>
+                                    <!-- <td>{{a.meanrr}}</td>
+                                    <td>{{a.sdrr}}</td> -->
+                                    <td>{{a.cvrr}}</td>
+                                    <td>{{a.rmssd}}</td>
+                                </tr>
+                                {% endfor %}
+                                {% for a in Hasil_1_over %}
+                                <tr>
+                                    <td>
+                                        <a href="/grafik/{{a.subject}}" target="_blank">{{a.subject}}</a>
+                                    </td>
+                                    <!-- <td>{{a.meanrr}}</td>
+                                    <td>{{a.sdrr}}</td> -->
+                                    <td>{{a.cvrr}}</td>
+                                    <td>{{a.rmssd}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% if Hasil_1.count() == 0 %}
+                    <div class="text-center text-muted"><i>Belum ada data</i></div>
+                    {% endif %}
+                </div>
+                <div class="card-footer text-muted text-right">
+                    <!-- Jml : {{jml_stroke['1']}} -->
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-header">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-6 px-0">
+                                <div class="h5 mb-0">Non-Stroke</div>
+                            </div>
+                            <div class="col-6 px-0 text-right text-muted">
+                                Jml : {{jml_stroke['0']}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <!-- <th>MeanRR</th>
+                                    <th>SDRR</th> -->
+                                    <th>CVRR</th>
+                                    <th>RMSSD</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for a in Hasil_0 %}
+                                <tr>
+                                    <td><a href="/grafik/{{a.subject}}" target="_blank">{{a.subject}}</a></td>
+                                    <!-- <td>{{a.meanrr}}</td>
+                                    <td>{{a.sdrr}}</td> -->
+                                    <td>{{a.cvrr}}</td>
+                                    <td>{{a.rmssd}}</td>
+                                </tr>
+                                {% endfor %}
+                                {% for a in Hasil_0_over %}
+                                <tr>
+                                    <td><a href="/grafik/{{a.subject}}" target="_blank">{{a.subject}}</a></td>
+                                    <!-- <td>{{a.meanrr}}</td>
+                                    <td>{{a.sdrr}}</td> -->
+                                    <td>{{a.cvrr}}</td>
+                                    <td>{{a.rmssd}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% if Hasil_0.count() == 0 %}
+                    <div class="text-center text-muted"><i>Belum ada data</i></div>
+                    {% endif %}
+                </div>
+                <div class="card-footer text-muted text-right">
+                    <!-- Jml : {{jml_stroke['0']}} -->
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="col-md-1"></div> -->
+
+        <div class="col-md-2">
+            {% include 'btnbarlatih.html' %}
+
+        </div>
+
+    </div>
+
+</div>
+<span id="stroke" name="{{jml_stroke['1']}}"></span>
+<span id="nonstroke" name="{{jml_stroke['0']}}"></span>
+
+{% include 'footer.html' %}

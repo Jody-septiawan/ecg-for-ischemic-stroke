@@ -1,0 +1,178 @@
+<div class="card bg-transparent">
+    <div class="card-body p-2">
+
+
+
+        {% if title == 'pengujian' %}
+
+        <a href="/uji" class="btn btn-secondary btn-block">Data Uji</a>
+
+        {% else %}
+
+        <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#upload">
+            Upload
+        </button>
+
+        <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#reset">
+            Reset By
+        </button>
+
+        {% if proses %}
+        <a href="/proses_data/uji" id="btn-proses" class="btn btn-primary btn-block">Proses
+            Data ({{proses}}) <div class="spinner-border spinner-border-sm spinner-border-proses"></div></a>
+        {% endif %}
+
+        <!-- 
+        <a href="/undersamp/uji" name="" id="" class="btn btn-primary btn-block">Under Sampling</a>
+
+        <a href="/oversamp/uji" name="" id="" class="btn btn-primary btn-block">Over Sampling</a>
+
+        <a href="/reset-undersamp/uji" name="" id="" class="btn btn-primary btn-block">Reset Sampling</a> -->
+
+
+        {% endif %}
+
+        <hr>
+        {% if title == 'pengujian' %}
+
+        <a href="/akurasi" name="" id="" class="btn btn-success btn-block">Akurasi</a>
+
+        <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#akurasi">
+            Uji Subject
+        </button>
+        {% endif %}
+
+        {% if title == 'data uji' %}
+        <a href="/shw-uji-subject" class="btn btn-success btn-block">Pengujian</a>
+
+        <hr>
+
+        <div class="card mt-3">
+            <div class="card-body p-1">
+
+                <canvas id="myChart" width="400" height="400"></canvas>
+            </div>
+        </div>
+        {% endif %}
+
+
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="upload" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form action="{{url_for('insert')}}" enctype="multipart/form-data" method="POST">
+                <div class="modal-body">
+                    <div class="container-fluid pt-4">
+                        <input type="hidden" name="kat" value="kat_uji">
+                        <input type="hidden" name="url" value="uji">
+                        <div class="input-group mb-3">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="inputGroupFile01"
+                                    aria-describedby="inputGroupFileAddon01" name="file" required>
+                                <label class="custom-file-label" for="inputGroupFile01">
+                                    Masukkan file sinyal(.csv)</label>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <div>
+                                <label for="" class="mb- h5">Label {{title}}</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="label" id="inlineRadio1" value="1"
+                                    required>
+                                <label class="form-check-label" for="inlineRadio1">Stroke</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="label" id="inlineRadio2" value="0"
+                                    required>
+                                <label class="form-check-label" for="inlineRadio2">Non-Stroke</label>
+                            </div>
+                            <div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer text-right">
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="reset" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form action="{{url_for('reset_by')}}" method="POST">
+                <div class="modal-body">
+                    <div class="container-fluid pt-4">
+                        <div class="form-group">
+                            <input type="hidden" name="url" value="uji">
+                            <label for="">Hapus nilai berdasarkan Subject :</label>
+                            <select class="form-control" name="id_subject" id="">
+                                <option value="0" selected>-</option>
+                                {% for a in Hasil_1 %}
+                                <option value="{{a.id}}">Stroke - {{a.subject}}</option>
+                                {% endfor %}
+                                {% for a in Hasil_0 %}
+                                <option value="{{a.id}}">Non-Stroke - {{a.subject}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer text-right">
+                    <div class="text-left">
+                        <small class="text-muted">
+                            <span class="text-danger">*</span>
+                            Form ini akan menghapus nilai
+                            <b>CVRR</b>
+                            &
+                            <b>RMSSD</b>
+                        </small>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Reset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="akurasi" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form action="{{url_for('uji_subject')}}" method="POST">
+                <div class="modal-body">
+                    <div class="container-fluid pt-4">
+                        <div class="form-group">
+                            <label for="">Uji Subject :</label>
+                            <select class="form-control" name="id_subject" id="" required>
+                                <option value="" selected>-</option>
+                                <option value="0">Semua Data Uji</option>
+                                {% for a in Hasil_1 %}
+                                <option value="{{a.id}}">Stroke - {{a.subject}}</option>
+                                {% endfor %}
+                                {% for a in Hasil_0 %}
+                                <option value="{{a.id}}">Non-Stroke - {{a.subject}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="nilai_k">Nilai K</label>
+                            <input type="number" class="form-control" name="nilai_k" id="nilai_k"
+                                aria-describedby="helpId" placeholder="" min="1" max="{{dAkurasi.count()}}" required>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer text-right">
+                    <button type="submit" class="btn btn-primary">Uji</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

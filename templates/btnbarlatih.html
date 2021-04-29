@@ -1,0 +1,109 @@
+<div class="card bg-transparent">
+    <div class="card-body p-2">
+        <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#upload">
+            Upload
+        </button>
+
+        <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#reset">
+            Reset Ciri By
+        </button>
+
+        {% if proses %}
+        <a href="/proses_data/latih" id="btn-proses" class="btn btn-primary btn-block">Proses
+            Data ({{proses}}) <div class="spinner-border spinner-border-sm spinner-border-proses"></div></a>
+        {% endif%}
+
+
+        <!-- <a href="/undersamp/latih" name="" id="" class="btn btn-primary btn-block">Under Sampling</a>
+
+        <a href="/oversamp/latih" name="" id="" class="btn btn-primary btn-block">Over Sampling</a>
+
+        <a href="/reset-undersamp/latih" name="" id="" class="btn btn-primary btn-block">Reset Sampling</a> -->
+        <hr>
+        <div class="card mt-3">
+            <div class="card-body p-1">
+
+                <canvas id="myChart" width="400" height="400"></canvas>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="upload" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form action="{{url_for('insert')}}" enctype="multipart/form-data" method="POST">
+                <div class="modal-body">
+                    <div class="container-fluid pt-4">
+                        <input type="hidden" name="kat" value="kat_latih">
+                        <input type="hidden" name="url" value="latih">
+                        <div class="input-group mb-3">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="inputGroupFile01"
+                                    aria-describedby="inputGroupFileAddon01" name="file" required>
+                                <label class="custom-file-label" for="inputGroupFile01">
+                                    Masukkan file sinyal(.csv)</label>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <div>
+                                <label for="" class="mb- h5">Label data {{title}}</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="label" id="inlineRadio1" value="1"
+                                    required>
+                                <label class="form-check-label" for="inlineRadio1">Stroke</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="label" id="inlineRadio2" value="0"
+                                    required>
+                                <label class="form-check-label" for="inlineRadio2">Non-Stroke</label>
+                            </div>
+                            <div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer text-right">
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="reset" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form action="{{url_for('reset_by')}}" method="POST">
+                <div class="modal-body">
+                    <div class="container-fluid pt-4">
+                        <div class="form-group">
+                            <input type="hidden" name="url" value="latih">
+                            <label for="">Hapus nilai berdasarkan Subject :</label>
+                            <select class="form-control" name="id_subject" id="">
+                                <option value="0" selected>-</option>
+                                {% for a in Hasil_1 %}
+                                <option value="{{a.id}}">Stroke - {{a.subject}}</option>
+                                {% endfor %}
+                                {% for a in Hasil_0 %}
+                                <option value="{{a.id}}">Non-Stroke - {{a.subject}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer text-right">
+                    <small class="text-muted">*Form ini akan menghapus nilai
+                        <b>CVRR</b>
+                        &
+                        <b>RMSSD</b></small>
+                    <button type="submit" class="btn btn-primary">Reset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,28 @@
+<div class="d-flex" id="wrapper">
+
+    <!-- Sidebar -->
+    <div class="bg-light border-right" id="sidebar-wrapper">
+        <div class="sidebar-heading">
+            &nbsp
+        </div>
+        <div class="list-group list-group-flush">
+            {% if title == 'latih' %}
+            <a href="{{url_for('Index')  }}" class="list-group-item list-group-item-action bg-light h5 px-1">Latih</a>
+            {% else %}
+            <a href="{{url_for('Index')  }}" class="list-group-item list-group-item-action bg-light px-1">Latih</a>
+            {% endif %}
+            {% if title == 'data uji' or title == 'uji akurasi' %}
+            <a href="{{url_for('Uji')  }}" class="list-group-item list-group-item-action bg-light h5 px-1">Uji</a>
+            {% else %}
+            <a href="{{url_for('Uji')  }}" class="list-group-item list-group-item-action bg-light px-1">Uji</a>
+            {% endif %}
+            {% if title == 'Convert' %}
+            <a href="{{url_for('Convert')  }}"
+                class="list-group-item list-group-item-action bg-light px-1 h5">Convert</a>
+            {% else %}
+            <!-- <a href="{{url_for('Convert')  }}" class="list-group-item list-group-item-action bg-light px-1">Convert</a> -->
+            {% endif %}
+
+        </div>
+    </div>
+    <!-- /#sidebar-wrapper -->

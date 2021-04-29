@@ -1,0 +1,32 @@
+body{
+    background-color: antiquewhite;
+}
+
+.list-1{
+    cursor: pointer !important;
+}
+
+#list td,th{
+    text-align: center;
+}
+
+.pointer{
+    cursor: pointer;
+    transition: .4s;
+
+}
+.pointer:hover{
+    cursor: pointer;
+    color: rgb(0, 114, 9);
+    transition: .4s;
+    font-size: 18px;
+}
+
+.bg-merah{
+    background-color: #D64550;
+}
+
+.bg-nav-merah{
+    background-color: #e2737c;
+    color: white;
+}
